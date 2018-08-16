@@ -43,7 +43,11 @@ app.configure('production|development', 'connector', function(){
  */
 app.configure('production|development', function() {
 	
-	//路由配置
+	/**
+	 * 路由配置
+	 * 如果当前的服务器类型是chat，就会把路由到routeUtil.chat方法
+	 * rotutes的chat属性对应rotuteUtil.chat()方法
+	 */
 	app.route('chat', routeUtil.chat);
 
 	//过滤器

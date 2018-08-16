@@ -25,9 +25,9 @@ var handler = Handler.prototype;
  * 
  * Send messages to users
  *
- * @param {Object} msg message from client
- * @param {Object} session
- * @param  {Function} next next stemp callback
+ * @param {Object} msg       客户端发送的消息对象
+ * @param {Object} session   服务器端和当前用户会话
+ * @param  {Function} next   将客户端请求发送消息的结果返回给客户端
  *
  */
 handler.send = function(msg, session, next) {
@@ -38,7 +38,10 @@ handler.send = function(msg, session, next) {
 	//发消息的人的名字
 	var username = session.uid.split('*')[0];
 	
-	//获取通道服务
+	/**
+	 * 获取通道服务.
+	 * 接下来根据用户所在的rid，得到聊天服务器使用
+	 */
 	var channelService = this.app.get('channelService');
 
 	//
@@ -48,7 +51,7 @@ handler.send = function(msg, session, next) {
 		target: msg.target   //发给谁的
 	};
 
-
+	//通过用户的房间id也就是rid，获取所在的chat服务器
 	channel = channelService.getChannel(rid, false);
 
 	/**

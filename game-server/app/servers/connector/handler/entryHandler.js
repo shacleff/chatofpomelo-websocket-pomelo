@@ -66,6 +66,23 @@ handler.enter = function(msg, session, next) {
 	 * put user into channel
 	 * .chat???从哪里来
 	 * ChatRemote.prototype.add = function(uid, sid, name, flag, cb) 为何和chatRemote中的参数对不上呢？？？
+	 * 
+	 * 核心流程第二步：客户端连接connector服务器，connector将新登录进来的额用户添加到channel里，通知channel里的所有用户，并通过ChatRemote的add方法的返回值，返回该channel的所有用户名字
+	 * 
+	 * var param = {
+	 *    route: 'onAdd',
+	 *	  user: username
+	 * };
+	 * 
+	 * 通过这个'onAdd'事件，
+	 * 通过这个方法，channel.pushMessage(param); 广播给所有channel里的用户，user列表,客户端得到后，刷新用户列表,客户端调用的方法如下：
+	 * 
+	 * pomelo.on('onAdd', function(data) {
+	 *	 var user = data.user;
+	 *	 tip('online', user);
+	 *	 addUser(user);
+	 * });
+	 * 
 	 */
 	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
 		next(null, {

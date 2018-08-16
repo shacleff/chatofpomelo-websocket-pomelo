@@ -20,6 +20,8 @@ var ChatRemote = function(app) {
 ChatRemote.prototype.add = function(uid, sid, name, flag, cb) {
 	var channel = this.channelService.getChannel(name, flag);
 	var username = uid.split('*')[0];
+
+	//
 	var param = {
 		route: 'onAdd',
 		user: username

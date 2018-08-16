@@ -58,7 +58,10 @@ handler.queryEntry = function(msg, session, next) {
 	 */
 	var availableConnector = dispatcher.dispatch(uid, connectors);
 
-	//有可用connector，返回成功标志
+	/**
+	 * 核心流程第一步：客户端连接gate服务器， gate返回给客户端connector的host和clientPort 
+	 * 这个是登录所在的服务器. 和聊天服务器必然不再同一个服务器上，不然就不是多进程了啊
+	 */
 	next(null, {
 		code: 200,                            // 成功标志返回值
 		host: availableConnector.host,        // 主机
