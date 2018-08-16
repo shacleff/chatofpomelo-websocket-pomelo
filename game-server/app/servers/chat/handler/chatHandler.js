@@ -51,16 +51,35 @@ handler.send = function(msg, session, next) {
 
 	channel = channelService.getChannel(rid, false);
 
-	//广播给channel通道里面的所有用户发送消息
-	//the target is all users
+	/**
+	 * 广播给channel通道里面的所有用户发送消息
+	 * the target is all users
+	 */
 	if(msg.target == '*') {
+
+		//向所有channel中的用户广播消息
 		channel.pushMessage('onChat', param);
+
+
 	}
-	//给指定的一个用户发送一条消息
-	//the target is specific user
+	/**
+	 * 给指定的一个用户发送一条消息
+	 * the target is specific user
+	 */
 	else {
+
+		//
 		var tuid = msg.target + '*' + rid;
+
+		//
 		var tsid = channel.getMember(tuid)['sid'];
+
+		/**
+		 * 通过uid想指定用户发送消息
+		 * 'onChat' 消息名字
+		 * param 消息具体内容
+		 * [{uid: tuid, sid: tsid}] 给的那个用户发送消息时，这个用户的标识  
+		 */
 		channelService.pushMessageByUids('onChat', param, [{
 			uid: tuid,
 			sid: tsid
@@ -69,6 +88,6 @@ handler.send = function(msg, session, next) {
 
 	//交给下一个中间件处理
 	next(null, {
-		route: msg.route
+		route: msg.route  //这个rotute是客户端发送这个消息时何时加上的？？？
 	});
 };

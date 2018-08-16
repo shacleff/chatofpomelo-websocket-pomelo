@@ -1,9 +1,22 @@
+//
 var pomelo = window.pomelo;
+
+//用户自己的名字
 var username;
-var users;
+
+//用户自己所在的房间id
 var rid;
+
+//所有用户组成的一个数组
+var users;
+
+//
 var base = 1000;
+
+//
 var increase = 25;
+
+//检查命名规则的正则
 var reg = /^[a-zA-Z0-9_\u4e00-\u9fa5]+$/;
 
 // 
@@ -54,13 +67,18 @@ util = {
 	}
 };
 
-//说完话后，滚到到滑动条最底端
+//
+/**
+ * 说完话后，滚到到滑动条最底端
+ */
 function scrollDown(base) {
 	window.scrollTo(0, base);
 	$("#entry").focus();
 };
 
-// add message on board
+/**
+ * 添加一条聊天消息到聊天列表中
+ */
 function addMessage(from, target, text, time) {
 
 	//说的人的名字，是广播，还是给具体某个人说话

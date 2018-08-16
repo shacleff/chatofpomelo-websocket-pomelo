@@ -51,13 +51,15 @@ ChatRemote.prototype.get = function(name, flag) {
 		users = channel.getMembers();
 	}
 	for(var i = 0; i < users.length; i++) {
+
+		//用户名 + ‘*’ + rid，所以这里得到用户名
 		users[i] = users[i].split('*')[0];
 	}
 	return users;
 };
 
 /**
- * 功能：把人从制定名字对应的channel中踢出去
+ * 功能：把人从指定名字对应的channel中踢出去
  * Kick user out chat channel.
  *
  * @param {String} uid unique id for user    唯一用户id
@@ -66,16 +68,26 @@ ChatRemote.prototype.get = function(name, flag) {
  *
  */
 ChatRemote.prototype.kick = function(uid, sid, name, cb) {
+	
 	var channel = this.channelService.getChannel(name, false);
+
 	// leave channel
 	if( !! channel) {
 		channel.leave(uid, sid);
 	}
+
+	//
 	var username = uid.split('*')[0];
+
+	//
 	var param = {
 		route: 'onLeave',
 		user: username
 	};
+
+	//
 	channel.pushMessage(param);
+
+	//
 	cb();
 };

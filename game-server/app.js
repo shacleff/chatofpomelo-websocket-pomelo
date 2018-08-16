@@ -1,29 +1,17 @@
+//引入pomelo模块，接着下面可以创建一个pomelo实例
 var pomelo = require('pomelo');
 
 //聊天服务器
 var routeUtil = require('./app/util/routeUtil');
+
 /**
- * Init app for client.
+ * 初始化一个pomelo app实例
  */
 var app = pomelo.createApp();
 
 //当前应用的名字
 app.set('name', 'chatofpomelo-websocket');
  
-/**
- * connector服务器
- * app configuration
- */
-app.configure('production|development', 'connector', function(){
-	app.set('connectorConfig',
-		{
-			connector : pomelo.connectors.hybridconnector,
-			heartbeat : 3,
-			useDict : true,
-			useProtobuf : true
-		});
-});
-
 /**
  * 网关服务器
  */
@@ -36,18 +24,33 @@ app.configure('production|development', 'gate', function(){
 });
 
 /**
+ * connector服务器
+ */
+app.configure('production|development', 'connector', function(){
+
+	//
+	app.set('connectorConfig',
+		{
+			connector : pomelo.connectors.hybridconnector,
+			heartbeat : 3,                                   //心跳3s检测一次
+			useDict : true,                                  //
+			useProtobuf : true                               //使用protobuf协议
+		});
+});
+
+/**
  * chat应用服务器
- * app configure
  */
 app.configure('production|development', function() {
-	// route configures
+	
+	//路由配置
 	app.route('chat', routeUtil.chat);
 
-	// filter configures
+	//过滤器
 	app.filter(pomelo.timeout());
 });
 
-// start app
+// pomelo app实例开始运行
 app.start();
 
 //捕捉全局没有被捕捉到的异常错误
