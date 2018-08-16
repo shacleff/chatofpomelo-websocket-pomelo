@@ -23,16 +23,19 @@ handler.enter = function(msg, session, next) {
 	var sessionService = self.app.get('sessionService');
 
 	//duplicate log in
+	//用户已经在聊天室中了，不可以重复进入
 	if( !! sessionService.getByUid(uid)) {
+
 		next(null, {
 			code: 500,
 			error: true
 		});
+
 		return;
 	}
 
 	session.bind(uid);
-	session.set('rid', rid);
+	session.set('rid', rid); 
 	session.push('rid', function(err) {
 		if(err) {
 			console.error('set rid for session service failed! error is : %j', err.stack);
@@ -41,6 +44,7 @@ handler.enter = function(msg, session, next) {
 	session.on('closed', onUserLeave.bind(null, self.app));
 
 	//put user into channel
+	//.chat???从哪里来
 	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
 		next(null, {
 			users:users
@@ -59,5 +63,7 @@ var onUserLeave = function(app, session) {
 	if(!session || !session.uid) {
 		return;
 	}
+
+	//ChatRemote.prototype.kick = function(uid, sid, name, cb) ??? 参数为何对不上
 	app.rpc.chat.chatRemote.kick(session, session.uid, app.get('serverId'), session.get('rid'), null);
 };
