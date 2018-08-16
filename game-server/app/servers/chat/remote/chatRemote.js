@@ -8,6 +8,7 @@ var ChatRemote = function(app) {
 };
 
 /**
+ * 功能：将指定uid的人加入到指定服务器id和channel通道中
  * Add user into chat channel.
  *
  * @param {String} uid unique id for user
@@ -25,6 +26,7 @@ ChatRemote.prototype.add = function(uid, sid, name, flag, cb) {
 	};
 	channel.pushMessage(param);
 
+	//将用户uid对应的这个人，加到对应名字的channel中
 	if( !! channel) {
 		channel.add(uid, sid);
 	}
@@ -33,12 +35,13 @@ ChatRemote.prototype.add = function(uid, sid, name, flag, cb) {
 };
 
 /**
+ * 功能：通过通道名字，得到所有用户的数组
  * Get user from chat channel.
  *
- * @param {Object} opts parameters for request
- * @param {String} name channel name
- * @param {boolean} flag channel parameter
- * @return {Array} users uids in channel
+ * @param {Object} opts parameters for request  
+ * @param {String} name channel name            通道名字
+ * @param {boolean} flag channel parameter      通道参数
+ * @return {Array} users uids in channel        所有用户uid列表
  *
  */
 ChatRemote.prototype.get = function(name, flag) {
@@ -54,11 +57,12 @@ ChatRemote.prototype.get = function(name, flag) {
 };
 
 /**
+ * 功能：把人从制定名字对应的channel中踢出去
  * Kick user out chat channel.
  *
- * @param {String} uid unique id for user
- * @param {String} sid server id
- * @param {String} name channel name
+ * @param {String} uid unique id for user    唯一用户id
+ * @param {String} sid server id             唯一服务器id
+ * @param {String} name channel name         通道名字
  *
  */
 ChatRemote.prototype.kick = function(uid, sid, name, cb) {
