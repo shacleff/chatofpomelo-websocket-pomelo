@@ -1,4 +1,7 @@
 var chatRemote = require('../remote/chatRemote');
+/**
+ * 模块功能：聊天服务器实现
+ */
 
 /**
  * 先导出具有相应功能的对象

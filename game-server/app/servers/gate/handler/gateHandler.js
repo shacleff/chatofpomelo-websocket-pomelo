@@ -1,4 +1,8 @@
 var dispatcher = require('../../../util/dispatcher');
+/**
+ * 模块功能：网关
+ */
+
 
 module.exports = function(app) {
 	return new Handler(app);

@@ -1,3 +1,8 @@
+/**
+ * 模块功能： 服务器分配
+ * @param {*} app 
+ */
+
 module.exports = function(app) {
 	return new Handler(app);
 };
