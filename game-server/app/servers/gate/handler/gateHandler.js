@@ -11,6 +11,7 @@ var Handler = function(app) {
 var handler = Handler.prototype;
 
 /**
+ * 处理用户进来
  * Gate handler that dispatch user to connectors.
  *
  * @param {Object} msg message from client
