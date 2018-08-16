@@ -13,14 +13,18 @@
         <script src="js/lib/build/build.js" type="text/javascript">
 
         </script>
+
+
         <script type="text/javascript">
-         
-         require('boot');
+            require('boot');
         </script> 
-        <script src="js/client.js">
-                		
-        </script>
+
+        <!-- 客户端逻辑 -->
+        <script src="js/client.js"> </script>
+
+        <!--  -->
         <script src="js/pop.js" type="text/javascript">
+
 
         </script>
     </head>
@@ -34,16 +38,19 @@
                 <table>
                     <tr>
                         <td>
+                            <!-- 输入框输入用户名 -->
                             <input id="loginUser" type="text" placeholder="enter your name" />
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <input name="channels" type="text" id="channelList" placeholder="enter your channel"
-                            />
+                            <!-- 输入房间，不同房间里面的用户不可以通信 -->
+                            <input name="channels" type="text" id="channelList" placeholder="enter your channel"/>
+
                         </td>
                         <tr>
                             <td>
+                                <!-- 点击登录按钮 -->
                                 <input id="login" type='button' value="join" />
                             </td>
                         </tr>

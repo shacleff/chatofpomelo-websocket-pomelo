@@ -52,7 +52,7 @@ handler.enter = function(msg, session, next) {
 	//.chat???从哪里来
 	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
 		next(null, {
-			users:users
+			users:users  //客户端在登录服务器成功后，返回给客户端所有玩家列表
 		});
 	});
 };
@@ -69,6 +69,6 @@ var onUserLeave = function(app, session) {
 		return;
 	}
 
-	//ChatRemote.prototype.kick = function(uid, sid, name, cb) ??? 参数为何对不上
+	//和服务器定义的方法: ChatRemote.prototype.kick = function(uid, sid, name, cb) ??? 参数为何对不上
 	app.rpc.chat.chatRemote.kick(session, session.uid, app.get('serverId'), session.get('rid'), null);
 };
