@@ -1,0 +1,24 @@
+1.
+-----玩家登录网关成功,为用户分配一个connector服务器： 玩家uid:jianan availableConnector.id:connector-server-3
+
+2.
+-----routeUtil.chat 根据rid分配一个可用的ChatServer服务器 session.get('rid'):1 availableChatServer.id:chat-server-3
+
+3.
+-----ChatRemote.prototype.add方法 通过channel 新增一个用户 uid:jianan*1 sid:connector-server-3 rid:1 flag:true
+
+4.
+-----玩家进入聊天服务器,获取用户列表:["jianan"]
+
+
+
+5.
+-----session断开，connector服务器 踢掉用户, session.uid:jianan*1 app.get('serverId'):connector-server-3 session.get('rid'):1
+
+6.
+-----routeUtil.chat 根据rid分配一个可用的ChatServer服务器 session.get('rid'):1 availableChatServer.id:chat-server-3
+
+7.
+-----用户被踢 ChatRemote.prototype.kick called, uid:jianan*1 sid:connector-server-3 rid:1 route:onLeave username:jianan
+
+

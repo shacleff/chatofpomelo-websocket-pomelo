@@ -1,0 +1,7 @@
+比如：具体的chat服务器方面，根据玩家的uid 根据crc算法，随机来分配它一个ChatServer服务器，这个ChatServer可以位于不同的机器上，这样就实现了负载均衡。想下啊，不同机器，不同进程，这样水平扩展就太方便了。
+
+人数增多时，只需要增加点机器多开点进程就搞定了负载的问题。
+
+var channel = this.channelService.getChannel(rid, flag);
+
+但是同一个rid上的所有玩家都在同一个channel上，这就比较有意思了。想下前提：“他们位于不同的机器上不同的进程中，但是channel却是一致的”，这样他们之间通过这几个channel可以相互通信。
