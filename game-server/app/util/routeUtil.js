@@ -18,6 +18,9 @@ exp.chat = function(session, msg, app, cb) {
 	 */
 	var availableChatServer = dispatcher.dispatch(session.get('rid'), chatServers);
 
+	console.info("-----routeUtil.chat 根据rid分配一个可用的ChatServer服务器 session.get('rid'):" + session.get('rid') 
+																						     + " availableChatServer.id:" + availableChatServer.id);
+
 	//
 	cb(null, availableChatServer.id);
 };

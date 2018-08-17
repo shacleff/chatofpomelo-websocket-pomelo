@@ -85,8 +85,6 @@ handler.enter = function(msg, session, next) {
 	 * 
 	 */
 
-	
-
 	self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function(users){
 
 		console.info("-----玩家进入聊天服务器,获取用户列表:" + JSON.stringify(users));
@@ -111,6 +109,9 @@ var onUserLeave = function(app, session) {
 
 	//和服务器定义的方法: ChatRemote.prototype.kick = function(uid, sid, name, cb) ??? 参数为何对不上
 
-	console.info("-----session断开，connector服务器 踢掉用户, session.uid:" + session.uid + " app.get('serverId'):" + app.get('serverId') + " session.get('rid'):" + session.get('rid'));
+	console.info("-----session断开，connector服务器 踢掉用户, session.uid:" + session.uid 
+																		 + " app.get('serverId'):" + app.get('serverId') 
+																		 + " session.get('rid'):" + session.get('rid'));
+
 	app.rpc.chat.chatRemote.kick(session, session.uid, app.get('serverId'), session.get('rid'), null);
 };

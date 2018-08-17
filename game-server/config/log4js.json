@@ -3,6 +3,7 @@
     {
       "type": "console"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/con-log-${opts:serverId}.log",
@@ -14,6 +15,7 @@
       "backups": 5,
       "category": "con-log"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/rpc-log-${opts:serverId}.log",
@@ -24,6 +26,7 @@
       "backups": 5,
       "category": "rpc-log"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/forward-log-${opts:serverId}.log",
@@ -34,6 +37,7 @@
       "backups": 5,
       "category": "forward-log"
     },
+
     {
      "type": "file",
      "filename": "${opts:base}/logs/rpc-debug-${opts:serverId}.log",
@@ -44,6 +48,7 @@
      "backups": 5,
      "category": "rpc-debug"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/crash.log",
@@ -54,6 +59,7 @@
       "backups": 5,
       "category":"crash-log"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/admin.log",
@@ -64,6 +70,7 @@
       ,"backups": 5,
       "category":"admin-log"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/pomelo.log",
@@ -74,6 +81,7 @@
       ,"backups": 5,
       "category":"pomelo"
     },
+
     {
       "type": "file",
       "filename": "${opts:base}/logs/pomelo-admin.log",
@@ -84,6 +92,7 @@
       ,"backups": 5,
       "category":"pomelo-admin"
     },
+    
     {
       "type": "file",
       "filename": "${opts:base}/logs/pomelo-rpc.log",

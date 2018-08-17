@@ -73,9 +73,8 @@ handler.queryEntry = function(msg, session, next) {
 	 * 	"pid":1945
 	 * }
 	 */
-	console.info("-----玩家登录网关成功,为用户分配一个connector服务器：" +
-				" 玩家uid:" + uid +
-				" availableConnector:" + JSON.stringify(availableConnector));
+	console.info("-----玩家登录网关成功,为用户分配一个connector服务器： 玩家uid:" + uid 
+																		   + " availableConnector.id:" + availableConnector.id);
 
 
 	/**
@@ -87,6 +86,4 @@ handler.queryEntry = function(msg, session, next) {
 		host: availableConnector.host,        // 主机
 		port: availableConnector.clientPort   // 端口号
 	});
-
-	
 };

@@ -1,4 +1,7 @@
-//引入pomelo模块，接着下面可以创建一个pomelo实例
+/**
+ * 引入pomelo模块，接着下面可以创建一个pomelo实例
+ * 由于位于node_modules中，所以不用写./xxx.js这种写法
+ */
 var pomelo = require('pomelo');
 
 //聊天服务器
@@ -29,13 +32,12 @@ app.configure('production|development', 'gate', function(){
 app.configure('production|development', 'connector', function(){
 
 	//
-	app.set('connectorConfig',
-		{
+	app.set('connectorConfig',{
 			connector : pomelo.connectors.hybridconnector,
 			heartbeat : 3,                                   //心跳3s检测一次
 			useDict : true,                                  //
 			useProtobuf : true                               //使用protobuf协议
-		});
+	});
 });
 
 /**

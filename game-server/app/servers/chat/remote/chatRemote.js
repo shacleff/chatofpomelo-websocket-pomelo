@@ -37,12 +37,10 @@ ChatRemote.prototype.add = function(uid, sid, rid, flag, cb) {
 
 	//将用户uid对应的这个人，加到对应名字的channel中
 	if( !! channel) {
-		console.info("-----ChatRemote.prototype.add channel add一个用户 uid:" + uid + " sid:" + sid);
+		console.info("-----ChatRemote.prototype.add方法 通过channel 新增一个用户 uid:" + uid + " sid:" + sid + " rid:" + rid + " flag:" + flag);
 		channel.add(uid, sid);
 	}
 
-	//
-	console.log("-----rid:" + rid + " flag:" + flag);
 	cb(this.get(rid, flag));
 };
 
@@ -81,9 +79,7 @@ ChatRemote.prototype.get = function(rid, flag) {
  */
 ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 	
-	console.info("-----用户被踢 ChatRemote.prototype.kick called, uid:" + uid 
-															+ " sid:"  + sid
-															+ " rid:" + rid);
+	
 
 	var channel = this.channelService.getChannel(rid, false);
 
@@ -101,9 +97,11 @@ ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 		user: username
 	};
 
-
-	console.info("-----广播用户被踢，route:" + 'onLeave'
-										   + " username:" + username);
+	console.info("-----广播用户被踢 ChatRemote.prototype.kick called, uid:" + uid 
+										   							      + " sid:"  + sid
+																	      + " rid:" + rid
+																	      + " route:" + 'onLeave'
+																	      + " username:" + username);									   
 
 	//
 	channel.pushMessage(param);
