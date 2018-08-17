@@ -10,8 +10,6 @@
 4.
 -----玩家进入聊天服务器,获取用户列表:["jianan"]
 
-
-
 5.
 -----session断开，connector服务器 踢掉用户, session.uid:jianan*1 app.get('serverId'):connector-server-3 session.get('rid'):1
 
