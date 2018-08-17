@@ -58,6 +58,13 @@ app.configure('production|development', function() {
 	app.filter(pomelo.timeout());
 });
 
+app.configure('production|development', 'chat', function(){
+	//新增脏话过滤器
+	var abuseFilter = require('./app/servers/chat/filter/abuseFilter');
+	app.filter(abuseFilter());
+});
+
+
 // pomelo app实例开始运行
 app.start();
 
