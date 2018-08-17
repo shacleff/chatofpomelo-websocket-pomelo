@@ -160,6 +160,8 @@ function tip(type, name) {
 
 // 初始化用户列表
 function initUserList(data) {
+	// $("#usersList").clear(); //不行？
+
 	users = data.users;
 	for(var i = 0; i < users.length; i++) {
 		var slElement = $(document.createElement("option"));

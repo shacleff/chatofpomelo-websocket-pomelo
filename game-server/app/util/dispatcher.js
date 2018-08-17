@@ -13,9 +13,13 @@ module.exports.dispatch = function(uid, connectors) {
 };
 
 /*
+crc32算法用法：
+
+//1.文件
 crc32(fs.readFileSync('README.md', 'utf8')).toString(16);
 // "127ad531"
 
+//2.字符串
 const { crc32 } = require('crc');
 crc32('hello').toString(16);
 // "3610a686"

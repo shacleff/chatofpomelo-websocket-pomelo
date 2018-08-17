@@ -47,6 +47,8 @@ app.configure('production|development', function() {
 	 * 路由配置
 	 * 如果当前的服务器类型是chat，就会把路由到routeUtil.chat方法
 	 * rotutes的chat属性对应rotuteUtil.chat()方法
+	 * 
+	 * 看名字也看一看出来： 是路由的意思
 	 */
 	app.route('chat', routeUtil.chat);
 

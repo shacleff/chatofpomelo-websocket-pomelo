@@ -46,12 +46,13 @@ handler.send = function(msg, session, next) {
 
 	//
 	var param = {
-		msg: msg.content,    //发送的具体消息内容
 		from: username,      //谁发的
-		target: msg.target   //发给谁的
+		target: msg.target,  //发给谁
+		msg: msg.content     //聊天消息内容
 	};
 
 	//通过用户的房间id也就是rid，获取所在的chat服务器
+	console.info("-----通过rid:" + rid + " 找到channel");
 	channel = channelService.getChannel(rid, false);
 
 	/**
@@ -60,10 +61,10 @@ handler.send = function(msg, session, next) {
 	 */
 	if(msg.target == '*') {
 
+		console.info("-----通过channel 向所有channel中的用户广播消息 param:" + JSON.stringify(param));
+
 		//向所有channel中的用户广播消息
 		channel.pushMessage('onChat', param);
-
-
 	}
 	/**
 	 * 给指定的一个用户发送一条消息
@@ -83,6 +84,9 @@ handler.send = function(msg, session, next) {
 		 * param 消息具体内容
 		 * [{uid: tuid, sid: tsid}] 给的那个用户发送消息时，这个用户的标识  
 		 */
+
+		console.log("-----通过channelService 向单个用户发送聊天消息, param:" + JSON.stringify(param));
+
 		channelService.pushMessageByUids('onChat', param, [{
 			uid: tuid,
 			sid: tsid
@@ -90,6 +94,7 @@ handler.send = function(msg, session, next) {
 	}
 
 	//交给下一个中间件处理
+	console.info("-----chatHandler send发送完消息，转交给下一个中间件l msg.route:" + msg.route);
 	next(null, {
 		route: msg.route  //这个rotute是客户端发送这个消息时何时加上的？？？
 	});

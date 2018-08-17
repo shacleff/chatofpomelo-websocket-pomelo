@@ -17,23 +17,33 @@ var ChatRemote = function(app) {
  * @param {boolean} flag channel parameter
  *
  */
-ChatRemote.prototype.add = function(uid, sid, name, flag, cb) {
-	var channel = this.channelService.getChannel(name, flag);
+ChatRemote.prototype.add = function(uid, sid, rid, flag, cb) {
+	console.info("-----ChatRemote.prototype.add");
+
+	//rid
+	var channel = this.channelService.getChannel(rid, flag);
+
+	//uid是 ‘名字 * rid ’ 3部分组成的字符串
 	var username = uid.split('*')[0];
 
-	//
+	//这个onAdd是 和 客户端通信的eventName，也就是基于事件极致通信，而非定义一个msgId通信的那种
 	var param = {
 		route: 'onAdd',
 		user: username
 	};
+
+	//广播玩家加入房间
 	channel.pushMessage(param);
 
 	//将用户uid对应的这个人，加到对应名字的channel中
 	if( !! channel) {
+		console.info("-----ChatRemote.prototype.add channel add一个用户 uid:" + uid + " sid:" + sid);
 		channel.add(uid, sid);
 	}
 
-	cb(this.get(name, flag));
+	//
+	console.log("-----rid:" + rid + " flag:" + flag);
+	cb(this.get(rid, flag));
 };
 
 /**
@@ -46,9 +56,9 @@ ChatRemote.prototype.add = function(uid, sid, name, flag, cb) {
  * @return {Array} users uids in channel        所有用户uid列表
  *
  */
-ChatRemote.prototype.get = function(name, flag) {
+ChatRemote.prototype.get = function(rid, flag) {
 	var users = [];
-	var channel = this.channelService.getChannel(name, flag);
+	var channel = this.channelService.getChannel(rid, flag);
 	if( !! channel) {
 		users = channel.getMembers();
 	}
@@ -69,9 +79,13 @@ ChatRemote.prototype.get = function(name, flag) {
  * @param {String} name channel name         通道名字
  *
  */
-ChatRemote.prototype.kick = function(uid, sid, name, cb) {
+ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 	
-	var channel = this.channelService.getChannel(name, false);
+	console.info("-----用户被踢 ChatRemote.prototype.kick called, uid:" + uid 
+															+ " sid:"  + sid
+															+ " rid:" + rid);
+
+	var channel = this.channelService.getChannel(rid, false);
 
 	// leave channel
 	if( !! channel) {
@@ -86,6 +100,10 @@ ChatRemote.prototype.kick = function(uid, sid, name, cb) {
 		route: 'onLeave',
 		user: username
 	};
+
+
+	console.info("-----广播用户被踢，route:" + 'onLeave'
+										   + " username:" + username);
 
 	//
 	channel.pushMessage(param);

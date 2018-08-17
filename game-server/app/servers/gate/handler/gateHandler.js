@@ -59,6 +59,26 @@ handler.queryEntry = function(msg, session, next) {
 	var availableConnector = dispatcher.dispatch(uid, connectors);
 
 	/**
+	 * ----玩家登录网关成功,为用户分配一个connector服务器： 玩家
+	 * uid:jianan 
+	 * availableConnector:{
+	 * 	"main":"/Users/lewangame/Documents/Learn/chatofpomelo-websocket/game-server/app.js",
+	 * 	"env":"development",
+	 * 	"id":"connector-server-3",      //其中这个connector服务器的分配，是根据玩家的uid用一个crc32算法，直接分配一个进程，和rid没关系. 但是不同进程上的用户由于在同一个
+	 * 	"host":"127.0.0.1",
+	 * 	"port":4052,
+	 * 	"clientPort":3052,
+	 * 	"frontend":"true",
+	 * 	"serverType":"connector",
+	 * 	"pid":1945
+	 * }
+	 */
+	console.info("-----玩家登录网关成功,为用户分配一个connector服务器：" +
+				" 玩家uid:" + uid +
+				" availableConnector:" + JSON.stringify(availableConnector));
+
+
+	/**
 	 * 核心流程第一步：客户端连接gate服务器， gate返回给客户端connector的host和clientPort 
 	 * 这个是登录所在的服务器. 和聊天服务器必然不再同一个服务器上，不然就不是多进程了啊
 	 */
@@ -67,4 +87,6 @@ handler.queryEntry = function(msg, session, next) {
 		host: availableConnector.host,        // 主机
 		port: availableConnector.clientPort   // 端口号
 	});
+
+	
 };
