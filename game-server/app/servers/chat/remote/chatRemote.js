@@ -79,8 +79,6 @@ ChatRemote.prototype.get = function(rid, flag) {
  */
 ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 	
-	
-
 	var channel = this.channelService.getChannel(rid, false);
 
 	// leave channel

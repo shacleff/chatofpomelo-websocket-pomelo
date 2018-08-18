@@ -32,7 +32,28 @@ exp.chat = function(session, msg, app, cb) {
 
 	console.info("-----routeUtil.chat 根据rid分配一个可用的ChatServer服务器 session.get('rid'):" + session.get('rid') 
 																						     + " availableChatServer.id:" + availableChatServer.id);
-
 	//
 	cb(null, availableChatServer.id);
 };
+
+/**
+ * 功能：获取系统时间
+ * @param {*} routeParam 对time服务器的路由参数。 这个routeParam参数就是rpc调用时的第一个参数
+ * @param {*} msg 封装rpc调用的信息信息。 包括：namespace, servertype等
+ * @param {*} app 是rpc客户端的上下文，一般由全局application充当
+ * @param {*} cb 回调  第一个参数是当有错误发生时的错误信息。 第二个参数是具体的服务器id
+ */
+exp.getCurrentTime = function(session, msg, app, cb){
+
+	//获取所有的时间服务器
+	var timeServers = app.getServersByType('time');
+
+	//
+	var availableTimeServer = dispatcher.dispatch(session.get('rid'), timeServers);
+
+	/**
+	 * null 表示没有错误
+	 * id  服务器id
+	 */
+	cb(null, availableTimeServer.id);
+}

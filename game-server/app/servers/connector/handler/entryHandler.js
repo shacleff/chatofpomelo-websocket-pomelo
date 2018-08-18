@@ -61,7 +61,7 @@ handler.enter = function(msg, session, next) {
 
 	//会话关闭
 	session.on('closed', onUserLeave.bind(null, self.app));
-
+	
 	/**
 	 * put user into channel
 	 * .chat???从哪里来
@@ -93,6 +93,8 @@ handler.enter = function(msg, session, next) {
 			users:users  //客户端在登录服务器成功后，返回给客户端所有玩家列表
 		});
 	});
+
+	
 };
 
 /**

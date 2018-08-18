@@ -62,6 +62,9 @@ app.configure('production|development', function() {
 	 */
 	app.route('chat', routeUtil.chat);
 
+	//时间服务器
+	app.route('time', routeUtil.getCurrentTime);
+
 	//过滤器
 	app.filter(pomelo.timeout());
 });
