@@ -26,7 +26,7 @@ ChatRemote.prototype.add = function(uid, sid, rid, flag, cb) {
 	//uid是 ‘名字 * rid ’ 3部分组成的字符串
 	var username = uid.split('*')[0];
 
-	//这个onAdd是 和 客户端通信的eventName，也就是基于事件极致通信，而非定义一个msgId通信的那种
+	//这个onAdd是 和 客户端通信的eventName，也就是基于事件机制通信，而非定义一个msgId通信的那种
 	var param = {
 		route: 'onAdd',
 		user: username
