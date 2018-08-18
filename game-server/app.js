@@ -36,7 +36,7 @@ app.configure('production|development', 'connector', function(){
 			connector : pomelo.connectors.hybridconnector,
 			heartbeat : 3,                                   //心跳3s检测一次
 			useDict : true,                                  //
-			useProtobuf : true                               //使用protobuf协议
+			useProtobuf : true                               //使用protobuf压缩
 	});
 });
 
@@ -81,7 +81,8 @@ app.configure('production|development', 'chat', function(){
 app.configure('production|development', 'gate', function(){
 	app.set('connectorConfig', {
 		connector: pomelo.connectors.hybridconnector,
-		useDict: true
+		useDict: true,
+		useProtobuf: true  //使用protobuf压缩
 	});
 });
 
