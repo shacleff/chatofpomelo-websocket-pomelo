@@ -1,6 +1,18 @@
 var exp = module.exports;
 var dispatcher = require('./dispatcher');
 
+/**
+ * 功能：chat路由函数 返回一个其选择的后端服务器id
+ * 
+ * @param {*} session 专门用于路由计算的参数，前端服务器由请求给后端服务器发rpc调用时，会使用session作为计算路由的参数，
+ * 但是当用户自定定义rpc的时候，用户完全可以自己定义这个参数的含义，当然也可以使用session
+ * 
+ * @param {*} msg  描述了当前rpc调用的所有信息，包括调用的服务器类型，服务器名字，具体的调用方法等信息
+ * 
+ * @param {*} app 上下文变量，一般用app
+ * 
+ * @param {*} cb 获得到后端服务器id后的回调函数 
+ */
 exp.chat = function(session, msg, app, cb) {
 
 	//根据类型(当前是chat)，获取服务器列表
