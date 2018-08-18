@@ -43,13 +43,13 @@ exp.chat = function(session, msg, app, cb) {
  * @param {*} app 是rpc客户端的上下文，一般由全局application充当
  * @param {*} cb 回调  第一个参数是当有错误发生时的错误信息。 第二个参数是具体的服务器id
  */
-exp.getCurrentTime = function(session, msg, app, cb){
+exp.getCurrentTime = function(routeParam, msg, app, cb){
 
 	//获取所有的时间服务器
 	var timeServers = app.getServersByType('time');
 
 	//
-	var availableTimeServer = dispatcher.dispatch(session.get('rid'), timeServers);
+	var availableTimeServer = dispatcher.dispatch(routeParam.crcUid, timeServers);
 
 	/**
 	 * null 表示没有错误

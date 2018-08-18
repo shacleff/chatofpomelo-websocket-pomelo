@@ -10,6 +10,9 @@ var routeUtil = require('./app/util/routeUtil');
 //组件
 var helloWorld = require('./app/components/HelloWorld');
 
+//监控上报
+var timeReport = require('./app/modules/timeReport');
+
 /**
  * 初始化一个pomelo app实例
  */
@@ -92,9 +95,13 @@ app.configure('production|development', 'gate', function(){
 	});
 });
 
-app.configure('production|development', 'master', function() {
-	app.load(helloWorld, {interval: 5000});
-});  
+//component
+// app.configure('production|development', 'master', function() {
+// 	app.load(helloWorld, {interval: 5000});
+// });  
+
+//
+app.registerAdmin(timeReport, {app: app});
 
 // pomelo app实例开始运行
 app.start();

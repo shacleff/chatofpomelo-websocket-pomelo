@@ -1,4 +1,7 @@
 var dispatcher = require('../../../util/dispatcher');
+
+var crc = require('crc');
+
 /**
  * 模块功能：网关
  * 
@@ -53,14 +56,22 @@ handler.queryEntry = function (msg, session, next) {
 	}
 
 	//远程调用time服务器查询当前时间
-	
-	this.app.rpc.time.timeRemote.getCurrentTime(session, 'test arg1', 'test arg2', function (hour, min, sec) {
+
+	//
+	var routeParam = {
+		crcUid: crc.crc32(uid)
+	}
+
+	console.info("----- routeParam.crcUid:" + routeParam.crcUid);
+
+	this.app.rpc.time.timeRemote.getCurrentTime(routeParam, 'test arg1', 'test arg2', function (hour, min, sec) {
 		console.info("-----玩家进入房间调用远程time服务器获取当前时间 hour:" + hour + " min:" + min + " sec:" + sec);
 
 		/**
 	 	 * 为这个uid分配一个connector  
 	    * select connector
-	 	*/
+		 */
+		console.info("-----uid:" + uid);
 		var availableConnector = dispatcher.dispatch(uid, connectors);
 
 		/**
