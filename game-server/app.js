@@ -72,6 +72,19 @@ app.configure('production|development', 'chat', function(){
 	app.filter(abuseFilter());
 });
 
+/**
+ * 功能：route路由压缩
+ * 当服务端给客户端发送的消息路由确定的时候，比如onLeave onChat onAdd等消息，这样的路由长度还是过长，
+ * 浪费了带宽，为了缩短路由信息，pomelo采用了基于字典的路由信息压缩
+ * 在dictionary.json中配置即可
+ */
+app.configure('production|development', 'gate', function(){
+	app.set('connectorConfig', {
+		connector: pomelo.connectors.hybridconnector,
+		useDict: true
+	});
+});
+
 
 // pomelo app实例开始运行
 app.start();
