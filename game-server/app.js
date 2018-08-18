@@ -7,6 +7,9 @@ var pomelo = require('pomelo');
 //聊天服务器
 var routeUtil = require('./app/util/routeUtil');
 
+//组件
+var helloWorld = require('./app/components/HelloWorld');
+
 /**
  * 初始化一个pomelo app实例
  */
@@ -89,6 +92,9 @@ app.configure('production|development', 'gate', function(){
 	});
 });
 
+app.configure('production|development', 'master', function() {
+	app.load(helloWorld, {interval: 5000});
+});  
 
 // pomelo app实例开始运行
 app.start();
