@@ -117,5 +117,6 @@ var onUserLeave = function(app, session) {
 																		 + " app.get('serverId'):" + app.get('serverId') 
 																		 + " session.get('rid'):" + session.get('rid'));
 
+	//踢人的操作，是需要后端服务器做一定逻辑，但是前端服务器监听到，因此必须在前端服务器 通过rpc调用 应用服务器完成清理操作。
 	app.rpc.chat.chatRemote.kick(session, session.uid, app.get('serverId'), session.get('rid'), null);
 };
