@@ -53,3 +53,15 @@ sessionz组件是sessionService的包装组件，用来维护用户的session信
 13.backendSession组件
 
 通过远程过程调用完成一些比如对原始session绑定uid等操作
+
+<五>rpc原理
+1.路由机制
+2.rpc通信原理依然是socket，pomelo默认是socket.io  也支持原生socket
+
+<六>pomelo的2个压缩
+1.基于字典的route路由压缩 useDict:true
+dictionary.json
+
+2.基于protobuf的消息内容的压缩 useProtobuf:true
+clientProtos.json
+serverProtos.json
