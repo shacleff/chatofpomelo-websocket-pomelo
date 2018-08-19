@@ -54,7 +54,7 @@ handler.enter = function(msg, session, next) {
 	//房间id
 	session.set('rid', rid); 
 
-	//
+	//这里不push的话，对BackendSession的属性的修改，只在后端服务器的处理链中后面部分有效，而不对其它任何地方的Session产生影响
 	session.push('rid', function(err) {
 		if(err) {
 			console.error('set rid for session service failed! error is : %j', err.stack);
