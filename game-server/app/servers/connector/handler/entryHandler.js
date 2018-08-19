@@ -30,7 +30,7 @@ handler.enter = function(msg, session, next) {
 	//用户名字 + '*' + rid 组成用户的唯一标示uid
 	var uid = msg.username + '*' + rid;
 
-	//用户会话服务
+	//用户会话服务: session组件和connector组件相关 加载完session组件后，会生成这个session，用于维护客户端的连接信息
 	var sessionService = self.app.get('sessionService');
 
 	//duplicate log in
