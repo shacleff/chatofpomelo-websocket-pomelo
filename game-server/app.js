@@ -100,13 +100,13 @@ app.configure('production|development', 'gate', function(){
 // 	app.load(helloWorld, {interval: 5000});
 // });  
 
-//
-app.registerAdmin(timeReport, {app: app});
+//上报
+// app.registerAdmin(timeReport, {app: app});
 
 // pomelo app实例开始运行
 app.start();
 
 //捕捉全局没有被捕捉到的异常错误
 process.on('uncaughtException', function(err) {
-	console.error(' Caught exception: ' + err.stack);
+	console.error('全局 Caught exception: ' + err.stack);
 });
