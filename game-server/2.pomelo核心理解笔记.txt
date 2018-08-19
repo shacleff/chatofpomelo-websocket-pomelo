@@ -27,6 +27,9 @@ connectors->接受客户端连接 因此会监听clientPort
 
 4.session组件
 app.get("sessionService")
+sessionz组件是sessionService的包装组件，用来维护用户的session信息
+
+
 
 5.connection组件
 

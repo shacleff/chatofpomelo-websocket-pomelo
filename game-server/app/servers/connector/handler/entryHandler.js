@@ -46,6 +46,8 @@ handler.enter = function(msg, session, next) {
 		return;
 	}
 
+	//-----用户登录成功，下面进行session和用户的绑定操作-----
+
 	//会话绑定uid作为唯一标示
 	session.bind(uid);
 

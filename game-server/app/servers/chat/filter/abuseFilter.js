@@ -24,11 +24,17 @@ Filter.prototype.before = function(msg, session, next){
         msg.content = msg.content.replace('fuck', '***');
     }
 
-    //下一个流程
+    /**
+     * 下一个流程
+     * 向后面传递具体的处理错误以及相应，在filter的实现中，在逻辑处理完后，必须调用filter，否则将打断整个处理链。
+     * 
+     * 有错误的话，可以在next(err, resp)这样调用。没有错误可以next(null, resp)
+     * 
+     */
     next();
 }
 
-//
+//这里可以做一些清理工作
 Filter.prototype.after = function(err, msg, session, resp, next){
 
     if(session.__abuse__){
@@ -38,7 +44,11 @@ Filter.prototype.after = function(err, msg, session, resp, next){
         console.log('-----说脏话的人 username:' + user_info[0] + " at room:" + user_info[1]);
     }
 
-    //下一个流程
+    /**
+     * 下一个流程
+     * 由于在执行after时，resp以及发送给了客户端了，所以处理链duierr不再敏感，无论是否有err，
+     * 整个afterFilter链都会执行完毕
+     */
     next(err);
 }
 
