@@ -250,7 +250,11 @@ function queryEntry(uid, callback) {
 				return;
 			}
 
-			//登录成功，也就是服务器给这个新进入的客户端分配一个connector成功
+			//
+			/**
+			 * 登录成功，也就是服务器给这个新进入的客户端分配一个connector服务器，
+			 * 告诉客户端连接成功的connectors服务器群其中一个的connector服务器host和端口号
+			 */
 			callback(data.host, data.port);
 		});
 	});
@@ -322,10 +326,10 @@ $(document).ready(function() {
 				//这里拼错会导致进入房间失败
 				var route = "connector.entryHandler.enter";
 
-				//
+				//请求加入房间，加入后，服务器返回房间内的玩家信息
 				pomelo.request(route, {   //handler.enter = function(msg, session, next)   这个{}对象里面的内容对应的人就是msg的内容. 服务器端的next就是用来通知，并且回调客户端传过来的回调函数的，比如：告诉客户端所有玩家列表
-					username: username,
-					rid: rid
+					username: username,   // 自己用户名
+					rid: rid              // 自己房间号
 				}, function(data) {
 
 					//服务端发现有错误。  route是客户端定义的。比如没有这个函数
