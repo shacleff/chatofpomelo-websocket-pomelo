@@ -25,11 +25,13 @@ connectors->接受客户端连接 因此会监听clientPort
 
 3.connector组件
 
+connector最重要的作用之一是承受客户端的连接。 然后客户端的通信通过调用handler里面的方法，然后filter先过滤。
+然后再通过channel单播或者广播，
+
+
 4.session组件
 app.get("sessionService")
 sessionz组件是sessionService的包装组件，用来维护用户的session信息
-
-
 
 5.connection组件
 
