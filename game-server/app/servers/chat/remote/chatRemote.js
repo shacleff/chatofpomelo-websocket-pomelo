@@ -47,6 +47,10 @@ ChatRemote.prototype.add = function(uid, sid, rid, flag, cb) {
 /**
  * 功能：通过通道名字，得到所有用户的数组
  * Get user from chat channel.
+ * 
+ * 
+ * 总结：由此可见，handler是给客户端用的，而这里的remote也就是rpc远程调用是给服务器用的，因为到时候分布式部署，
+ * 服务器也需要随时查询各个应用服务器的信息
  *
  * @param {Object} opts parameters for request  
  * @param {String} name channel name            通道名字
