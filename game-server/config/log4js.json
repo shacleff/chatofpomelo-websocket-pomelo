@@ -112,5 +112,5 @@
 
   "replaceConsole": true,
 
-  "lineDebug": false
+  "lineDebug": true
 }

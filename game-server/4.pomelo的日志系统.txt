@@ -1,0 +1,19 @@
+{
+    "type": "file",                                        //指定appenders的类型，可以是console， file， dataFile等
+    "filename": "./logs/con-log-${opts:serverId}.log",     //指定输出文件的路径
+    "pattern": "connector",                                //指定输出日志的pattern
+    "maxLogSize": 1048576,                                 //指定输出日志的最大大小
+    "layout": { 
+        "type": "basic"                                    //指定输出的layout样式
+    },
+    "backups": 5,                                          //指定输出的最大文件数目
+    "category": "con-log"                                  //指定该appender对应的category，如果没有该项，说明该appender是一个全局的appender
+},
+
+"levels": {
+    "rpc-log" : "ERROR",                                   //
+    "forward-log": "ERROR"                                 //
+},
+
+"replaceConsole": true,                                    //指定是否替换默认的console
+"lineDebug": false                                         //指定是否开启debug显示日志行数
