@@ -1,0 +1,21 @@
+<1>
+connector在pomelo中是承载连接客户端使用的。pomelo内建的connector包括sioconnector，hybirdconnector
+
+<2>
+构造函数三个参数满足 host, port, opts， 前2个用于监听socket绑定的
+
+<3>几个方法
+start：       开启对应的监听，当有连接事件发生的时候，会抛出连接事件，
+
+stop:         关闭了监听socket连接
+
+decode(解码):  当“收到客户端的请求message 或者 需要给客户端发送回应或者推送消息”的时候，pomelo会使用connector的decode函数对数据进行解码
+
+encode(编码):  当服务器 “给客户端的响应 或者 服务器端的推送消息”时，会使用connector的encode进行编码
+
+<4>
+disconnect:   客户端主动断开连接触发
+
+error:        通信出现错误
+
+meessage:     有消息收到时
