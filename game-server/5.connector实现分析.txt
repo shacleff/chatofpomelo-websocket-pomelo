@@ -19,3 +19,8 @@ disconnect:   客户端主动断开连接触发
 error:        通信出现错误
 
 meessage:     有消息收到时
+
+<5>消息的发送
+send       发送一个消息
+
+sendBatch  将小包消息批量缓存后发送，提高效率a
