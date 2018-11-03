@@ -1,5 +1,5 @@
-cd ./game-server && npm install -d
+cd ./game-server && cnpm install -d
 echo '============   game-server npm installed ============'
 cd ..
-cd ./web-server && npm install -d
+cd ./web-server && cnpm install -d
 echo '============   web-server npm installed ============'
