@@ -1,5 +1,6 @@
 /**
  * 功能：聊天过滤器。 
+ * 从application中filter方法调用可知道:before after2个方法
  * 在用户发言前，将骂人的话，骂人的单词替换成***
  */
 
@@ -37,11 +38,12 @@ Filter.prototype.before = function(msg, session, next){
 //这里可以做一些清理工作
 Filter.prototype.after = function(err, msg, session, resp, next){
 
+    // 因为调用一个filter的before完，会立马调用after，所以这个__abuse__字段before中有，那么在这里就会检测到
     if(session.__abuse__){
 
         //username + '*' + rid
         var user_info = session.uid.split('*');
-        console.log('-----说脏话的人 username:' + user_info[0] + " at room:" + user_info[1]);
+        // console.log('-----说脏话的人 username:' + user_info[0] + " at room:" + user_info[1]);
     }
 
     /**

@@ -1,3 +1,7 @@
+/**
+ * 
+ * @param {*} app 
+ */
 module.exports = function(app) {
 	return new ChatRemote(app);
 };

@@ -1,3 +1,7 @@
+/**
+ * 监控，并且向admin上报
+ * @param {*} opts 
+ */
 module.exports = function(opts){
     return new Module(opts);
 }

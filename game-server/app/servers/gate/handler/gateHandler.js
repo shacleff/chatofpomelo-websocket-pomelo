@@ -8,6 +8,8 @@ var crc = require('crc');
  * 我觉得这个应该作为第一层处理，因为：用户肯定先通过网关连接进来。 然后开始给用户分配一个connector服务器
  * 
  * 分配完connector服务器，接着可以分配一个session，并且和聊天服务器关联起来
+ * 
+ * 此后，connector作为承载客户端连接和接下来的交互功能
  */
 module.exports = function (app) {
 	return new Handler(app);
@@ -62,10 +64,10 @@ handler.queryEntry = function (msg, session, next) {
 		crcUid: crc.crc32(uid)
 	}
 
-	console.info("----- routeParam.crcUid:" + routeParam.crcUid);
+	// console.info("----- routeParam.crcUid:" + routeParam.crcUid);
 
 	this.app.rpc.time.timeRemote.getCurrentTime(routeParam, 'test arg1', 'test arg2', function (hour, min, sec) {
-		console.info("-----玩家进入房间调用远程time服务器获取当前时间 hour:" + hour + " min:" + min + " sec:" + sec);
+		// console.info("-----玩家进入房间调用远程time服务器获取当前时间 hour:" + hour + " min:" + min + " sec:" + sec);
 
 		/**
 	 	 * 为这个uid分配一个connector  

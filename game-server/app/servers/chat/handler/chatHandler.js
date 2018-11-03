@@ -1,6 +1,7 @@
 var chatRemote = require('../remote/chatRemote');
 /**
  * 模块功能：聊天服务器实现
+ * 在handler中的是由客户端调用使用的
  */
 
 /**
@@ -20,7 +21,8 @@ var Handler = function(app) {
 var handler = Handler.prototype;
 
 /**
- * session对应的这个人发了一条消息
+ * session对应的这个人发了一条消息.
+ * 客户端去调用这个send方法
  * 具体是给指定人发送消息还是广播给所有人， 待定...
  * 
  * Send messages to users
@@ -32,7 +34,7 @@ var handler = Handler.prototype;
  */
 handler.send = function(msg, session, next) {
 
-	//???
+	// 房间id。 也就是玩家以一个channel作为一个房间
 	var rid = session.get('rid');
 
 	//发消息的人的名字
@@ -52,7 +54,7 @@ handler.send = function(msg, session, next) {
 	};
 
 	//通过用户的房间id也就是rid，获取所在的chat服务器
-	console.info("-----通过rid:" + rid + " 找到channel");
+	// console.info("-----通过rid:" + rid + " 找到channel");
 	channel = channelService.getChannel(rid, false);
 
 	/**
@@ -61,7 +63,7 @@ handler.send = function(msg, session, next) {
 	 */
 	if(msg.target == '*') {
 
-		console.info("-----通过channel 向所有channel中的用户广播消息 param:" + JSON.stringify(param));
+		// console.info("-----通过channel 向所有channel中的用户广播消息 param:" + JSON.stringify(param));
 
 		//向所有channel中的用户广播消息
 		channel.pushMessage('onChat', param);
@@ -85,8 +87,10 @@ handler.send = function(msg, session, next) {
 		 * [{uid: tuid, sid: tsid}] 给的那个用户发送消息时，这个用户的标识  
 		 */
 
-		console.log("-----通过channelService 向单个用户发送聊天消息, param:" + JSON.stringify(param));
+		// console.log("-----通过channelService 向单个用户发送聊天消息, param:" + JSON.stringify(param));
 
+
+		// 服务器通过channel向指定的玩家发送消息
 		channelService.pushMessageByUids('onChat', param, [{
 			uid: tuid,
 			sid: tsid
@@ -94,8 +98,12 @@ handler.send = function(msg, session, next) {
 	}
 
 	//交给下一个中间件处理
-	console.info("-----chatHandler send发送完消息，转交给下一个中间件l msg.route:" + msg.route);
+	// console.info("-----chatHandler send发送完消息，转交给下一个中间件l msg.route:" + msg.route);
+	/**
+	 * 为什么必须用这个next进行传递给下一个中间件???,按道理，我都发完消息了，不需要再传递下路由了吧,
+	 * 发现这里注释掉其实也行
+	 */
 	next(null, {
-		route: msg.route  //这个rotute是客户端发送这个消息时何时加上的？？？
+		// route: msg.route  //这个rotute是客户端发送这个消息时何时加上的？？？
 	});
 };

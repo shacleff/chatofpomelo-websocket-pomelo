@@ -1,5 +1,8 @@
 /**
  * 模块功能： 服务器分配
+ * 理解前端服务器和后端服务器的配合:
+ * 		entryHandler作为前端服务器，比如当玩家进入一个channel成功后,需要往channel中添加人，因此可以通过rpc
+ * 		调用remote下面的接口。比如add
  * @param {*} app 
  */
 
@@ -101,6 +104,8 @@ handler.enter = function(msg, session, next) {
 
 /**
  * 用户断线
+ * 理解：
+ * 	entryHandler作为前端服务器，当玩家离线时，需要将自己从服务器中移除掉，因此可以调用remote方法来移除自己
  * User log out handler
  * @param {Object} app current application
  * @param {Object} session current session object
