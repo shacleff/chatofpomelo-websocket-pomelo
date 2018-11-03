@@ -12,3 +12,5 @@ v8.11.1
 * cnpm
 npm install cnpm -g --registry=https://registry.npm.taobao.org
 
+## 效果图
+![](shotscreens/1.png)
