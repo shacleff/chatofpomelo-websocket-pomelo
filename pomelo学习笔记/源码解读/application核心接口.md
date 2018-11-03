@@ -165,3 +165,47 @@ Application.registerAdmin = function(moduleId, module, opts) {
   };
 };
 ```
+# 7.app.load
+```
+/**
+ * Load component
+ *
+ * @param  {String} name    (optional) name of the component
+ * @param  {Object} component component instance or factory function of the component
+ * @param  {[type]} opts    (optional) construct parameters for the factory function
+ * @return {Object}     app instance for chain invoke
+ * @memberOf Application
+ */
+Application.load = function(name, component, opts) {
+  if(typeof name !== 'string') {
+    opts = component;
+    component = name;
+    name = null;
+    if(typeof component.name === 'string') {
+      name = component.name;
+    }
+  }
+
+  if(typeof component === 'function') {
+    component = component(this, opts);
+  }
+
+  if(!name && typeof component.name === 'string') {
+    name = component.name;
+  }
+
+  if(name && this.components[name]) {
+    // ignore duplicat component
+    logger.warn('ignore duplicate component: %j', name);
+    return;
+  }
+
+  this.loaded.push(component);
+  if(name) {
+    // components with a name would get by name throught app.components later.
+    this.components[name] = component;
+  }
+
+  return this;
+};
+```
