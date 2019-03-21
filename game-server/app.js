@@ -1,55 +1,29 @@
-/**
- * 引入pomelo模块，接着下面可以创建一个pomelo实例
- * 由于位于node_modules中，所以不用写./xxx.js这种写法
- */
-var pomelo = require('pomelo');
+var pomelo = require('pomelo');                            // 引入node_modules中的pomelo模块
+var routeUtil = require('./app/util/routeUtil');           // 聊天服务器
+var helloWorld = require('./app/components/HelloWorld');   // 组件
+var timeReport = require('./app/modules/timeReport');      // 监控上报
 
-//聊天服务器
-var routeUtil = require('./app/util/routeUtil');
-
-//组件
-var helloWorld = require('./app/components/HelloWorld');
-
-//监控上报
-var timeReport = require('./app/modules/timeReport');
-
-/**
- * 初始化一个pomelo app实例
- */
 var app = pomelo.createApp();
 
-//当前应用的名字
-app.set('name', 'chatofpomelo-websocket');
- 
-/**
- * 网关服务器
- */
-app.configure('production|development', 'gate', function(){
-	app.set('connectorConfig',
-		{
-			connector : pomelo.connectors.hybridconnector,
-			useProtobuf : true
-		});
-});
+app.set('name', 'chatofpomelo-websocket');                  // 当前应用的名字
 
-/**
- * connector服务器
- */
-app.configure('production|development', 'connector', function(){
-
-	//
-	app.set('connectorConfig',{
-			connector : pomelo.connectors.hybridconnector,
-			heartbeat : 3,                                   //心跳3s检测一次
-			useDict : true,                                  //
-			useProtobuf : true                               //使用protobuf压缩
+app.configure('production|development', 'gate', function(){ // gate
+	app.set('connectorConfig', {
+		connector : pomelo.connectors.hybridconnector,
+		useProtobuf : true
 	});
 });
 
-/**
- * chat应用服务器
- */
-app.configure('production|development', function() {
+app.configure('production|development', 'connector', function(){ // connector
+	app.set('connectorConfig',{
+		connector : pomelo.connectors.hybridconnector,
+		heartbeat : 3,                                   		//心跳3s检测一次
+		useDict : true,                                  		//
+		useProtobuf : true                               		//使用protobuf压缩
+	});
+});
+
+app.configure('production|development', function() {            // chat应用服务器
 	
 	/**
 	 * 功能：路由配置
@@ -68,16 +42,12 @@ app.configure('production|development', function() {
 	 */
 	app.route('chat', routeUtil.chat);
 
-	//时间服务器
-	app.route('time', routeUtil.getCurrentTime);
-
-	//过滤器
-	app.filter(pomelo.timeout());
+	app.route('time', routeUtil.getCurrentTime);             // 时间服务器
+	app.filter(pomelo.timeout());                            // 过滤器
 });
 
 app.configure('production|development', 'chat', function(){
-	//新增脏话过滤器
-	var abuseFilter = require('./app/servers/chat/filter/abuseFilter');
+	var abuseFilter = require('./app/servers/chat/filter/abuseFilter'); // 新增脏话过滤器
 	app.filter(abuseFilter());
 });
 
@@ -103,10 +73,8 @@ app.configure('production|development', 'gate', function(){
 //上报
 // app.registerAdmin(timeReport, {app: app});
 
-// pomelo app实例开始运行
 app.start();
 
-//捕捉全局没有被捕捉到的异常错误
 process.on('uncaughtException', function(err) {
 	console.error('全局 Caught exception: ' + err.stack);
 });

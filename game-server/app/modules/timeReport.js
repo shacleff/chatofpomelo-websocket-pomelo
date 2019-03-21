@@ -1,22 +1,19 @@
 /**
  * 监控，并且向admin上报
- * @param {*} opts 
  */
 module.exports = function(opts){
     return new Module(opts);
-}
+};
 
 var moduleId = "timeReport";
 module.exports.moduleId = moduleId;
 
-//
 var Module = function(opts){
     this.app = opts.app;
     this.type = opts.type || 'pull';
     this.interval = opts.interval || 5;
-}
+};
 
-//
 Module.prototype.monitorHandler = function(agent, msg, cb){
     console.info("-----serverId:" + this.app.getServerId() + " msg:" + msg);
     var serverId = agent.id;
@@ -26,9 +23,8 @@ Module.prototype.monitorHandler = function(agent, msg, cb){
         serverId: serverId,
         time: time
     });
-}
+};
 
-//
 Module.prototype.masterHandler = function(agent, msg){
     if(!msg){
         var testMsg = 'testMsg';
@@ -45,8 +41,8 @@ Module.prototype.masterHandler = function(agent, msg){
     }
 
     timeData[msg.serverId] = msg.time;
-}
+};
 
 Module.prototype.clientHandler = function(agent, msg, cb){
     cb(null, agent.get(moduleId));
-}
+};

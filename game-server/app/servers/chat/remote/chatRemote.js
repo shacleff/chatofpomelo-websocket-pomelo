@@ -86,18 +86,13 @@ ChatRemote.prototype.get = function(rid, flag) {
  *
  */
 ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
-	
 	var channel = this.channelService.getChannel(rid, false);
-
-	// leave channel
 	if( !! channel) {
 		channel.leave(uid, sid);
 	}
 
-	//
 	var username = uid.split('*')[0];
 
-	//
 	var param = {
 		route: 'onLeave',
 		user: username
@@ -109,9 +104,6 @@ ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 																	      + " route:" + 'onLeave'
 																	      + " username:" + username);									   
 
-	//
 	channel.pushMessage(param);
-
-	//
 	cb();
 };

@@ -4,12 +4,9 @@ var crc = require('crc');
 
 /**
  * 模块功能：网关
- * 
- * 我觉得这个应该作为第一层处理，因为：用户肯定先通过网关连接进来。 然后开始给用户分配一个connector服务器
- * 
- * 分配完connector服务器，接着可以分配一个session，并且和聊天服务器关联起来
- * 
- * 此后，connector作为承载客户端连接和接下来的交互功能
+ *   1.我觉得这个应该作为第一层处理，因为：用户肯定先通过网关连接进来。 然后开始给用户分配一个connector服务器
+ * 	 2.分配完connector服务器，接着可以分配一个session，并且和聊天服务器关联起来
+ *   3.此后，connector作为承载客户端连接和接下来的交互功能
  */
 module.exports = function (app) {
 	return new Handler(app);
@@ -21,83 +18,31 @@ var Handler = function (app) {
 
 var handler = Handler.prototype;
 
-/**
- * 处理用户进来
- * Gate handler that dispatch user to connectors.
- *
- * @param {Object} msg message from client
- * @param {Object} session
- * @param {Function} next next stemp callback
- *
- */
-handler.queryEntry = function (msg, session, next) {
+handler.queryEntry = function (msg, session, next) {          // 处理用户进来
 	var uid = msg.uid;
-
-	//进来的人连uid都没有，那肯定有问题
-	if (!uid) {
-
-		//进来的用户没有分配uid...向客户端返回错误码：500
+	if (!uid) { 										      // 进来的人没传入uid，报500错
 		next(null, {
 			code: 500
 		});
 		return;
 	}
 
-	/**
-	 * 没有connectors可用
-	 * get all connectors
-	 */
-	var connectors = this.app.getServersByType('connector');
-
-	//没有connector可用，那直接就返回客户端错误码：500
-	if (!connectors || connectors.length === 0) {
+	var connectors = this.app.getServersByType('connector');  // 得到所有connector服务器
+	if (!connectors || connectors.length === 0) { 			  // 无服务器可用
 		next(null, {
 			code: 500
 		});
 		return;
 	}
 
-	//远程调用time服务器查询当前时间
-
-	//
+	// 远程调用time服务器查询当前时间 这个参数看着没用，其实在routeUtil中可以看出来是发给哪个Time服务器
 	var routeParam = {
 		crcUid: crc.crc32(uid)
-	}
+	};
 
-	// console.info("----- routeParam.crcUid:" + routeParam.crcUid);
-
+	// 前端服务器gatehandler 调用后端服务器timeRemote来完成功能
 	this.app.rpc.time.timeRemote.getCurrentTime(routeParam, 'test arg1', 'test arg2', function (hour, min, sec) {
-		// console.info("-----玩家进入房间调用远程time服务器获取当前时间 hour:" + hour + " min:" + min + " sec:" + sec);
-
-		/**
-	 	 * 为这个uid分配一个connector  
-	    * select connector
-		 */
-		console.info("-----uid:" + uid);
-		var availableConnector = dispatcher.dispatch(uid, connectors);
-
-		/**
-		 * ----玩家登录网关成功,为用户分配一个connector服务器： 玩家
-		 * uid:jianan 
-		 * availableConnector:{
-		 * 	"main":"/Users/lewangame/Documents/Learn/chatofpomelo-websocket/game-server/app.js",
-		 * 	"env":"development",
-		 * 	"id":"connector-server-3",      //其中这个connector服务器的分配，是根据玩家的uid用一个crc32算法，直接分配一个进程，和rid没关系. 但是不同进程上的用户由于在同一个
-		 * 	"host":"127.0.0.1",
-		 * 	"port":4052,
-		 * 	"clientPort":3052,
-		 * 	"frontend":"true",
-		 * 	"serverType":"connector",
-		 * 	"pid":1945
-		 * }
-		 */
-		console.info("-----玩家登录网关成功,为用户分配一个connector服务器： 玩家uid:" + uid
-			+ " availableConnector.id:" + availableConnector.id);
-
-		/**
-		 * 核心流程第一步：客户端连接gate服务器， gate返回给客户端connector的host和clientPort 
-		 * 这个是登录所在的服务器. 和聊天服务器必然不再同一个服务器上，不然就不是多进程了啊
-		 */
+		var availableConnector = dispatcher.dispatch(uid, connectors);  // 获得一个可用的connector服务器
 		next(null, {
 			code: 200,                            // 成功标志返回值
 			host: availableConnector.host,        // 主机

@@ -138,12 +138,13 @@ function showChat() {  // 展示聊天面板
 };
 
 function queryEntry(uid, callback) {           // 玩家进来时，pomelo服务器尝试分配一个connector服务器
-	var route = 'gate.gateHandler.queryEntry'; // 远程调用服务器接口
 	pomelo.init({                              // 连接网关，端口配置在servers.json中
 		host: window.location.hostname,
 		port: 3014,
 		log: true
 	}, function() {
+
+		var route = 'gate.gateHandler.queryEntry'; // 远程调用服务器接口
 		pomelo.request(route, {
 			uid: uid
 		}, function(data) {
@@ -159,7 +160,7 @@ function queryEntry(uid, callback) {           // 玩家进来时，pomelo服务
 
 $(document).ready(function() {
 	showLogin(); // 首次进入，展示登录面板
-	
+
 	pomelo.on('onChat', function(data) { // 有人发送了一条聊天消息
 		addMessage(data.from, data.target, data.msg);
 		$("#chatHistory").show();
@@ -222,13 +223,13 @@ $(document).ready(function() {
 	});
 
 	$("#entry").keypress(function(e) {
-		var route = "chat.chatHandler.send";
 		var target = $("#usersList").val();
 		if(e.keyCode != 13){
 			return;
 		} 
 		var msg = $("#entry").attr("value").replace("\n", "");
 		if(!util.isBlank(msg)) {
+			var route = "chat.chatHandler.send";
 			pomelo.request(route, {
 				rid: rid,
 				content: msg,
