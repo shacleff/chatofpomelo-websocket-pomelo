@@ -11,4 +11,15 @@
 *  全局安装: sudo npm install -g pomelo
 
 ## 3)效果图
+
+* game-server启动
+
 ![](imgs/1.png)
+
+* web-server启动
+
+![](imgs/2.png)
+
+* 游戏效果
+
+![](imgs/3.png)
