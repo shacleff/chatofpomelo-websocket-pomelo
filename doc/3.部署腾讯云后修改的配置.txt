@@ -1,0 +1,5 @@
+1)servers.json  使用的 development
+    "host":"127.0.0.1" -->  "host":"132.232.5.46",
+
+2)master.json
+    "host":"127.0.0.1" -->  "host":"132.232.5.46",
