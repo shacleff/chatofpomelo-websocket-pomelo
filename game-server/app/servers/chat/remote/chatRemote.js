@@ -1,7 +1,3 @@
-/**
- * 
- * @param {*} app 
- */
 module.exports = function(app) {
 	return new ChatRemote(app);
 };
@@ -11,80 +7,38 @@ var ChatRemote = function(app) {
 	this.channelService = app.get('channelService');
 };
 
-/**
- * 功能：将指定uid的人加入到指定服务器id和channel通道中
- * Add user into chat channel.
- *
- * @param {String} uid unique id for user
- * @param {String} sid server id
- * @param {String} name channel name
- * @param {boolean} flag channel parameter
- *
- */
-ChatRemote.prototype.add = function(uid, sid, rid, flag, cb) {
-	console.info("-----ChatRemote.prototype.add");
+ChatRemote.prototype.add = function(uid, sid, rid, flag, cb) { // 玩家加入了服务器
+	var channel = this.channelService.getChannel(rid, flag); //rid
+	var username = uid.split('*')[0]; // uid--> ‘名字 * rid ’ 3部分组成的字符串
 
-	//rid
-	var channel = this.channelService.getChannel(rid, flag);
-
-	//uid是 ‘名字 * rid ’ 3部分组成的字符串
-	var username = uid.split('*')[0];
-
-	//这个onAdd是 和 客户端通信的eventName，也就是基于事件机制通信，而非定义一个msgId通信的那种
 	var param = {
-		route: 'onAdd',
+		route: 'onAdd', // 客户端使用，可以收到信息
 		user: username
 	};
 
-	//广播玩家加入房间
-	channel.pushMessage(param);
+	channel.pushMessage(param); // 广播通知其它玩家, 新进入玩家的信息
 
-	//将用户uid对应的这个人，加到对应名字的channel中
 	if( !! channel) {
-		console.info("-----ChatRemote.prototype.add方法 通过channel 新增一个用户 uid:" + uid + " sid:" + sid + " rid:" + rid + " flag:" + flag);
-		channel.add(uid, sid);
+		channel.add(uid, sid); // channel中加入一个人
 	}
 
 	cb(this.get(rid, flag));
 };
 
-/**
- * 功能：通过通道名字，得到所有用户的数组
- * Get user from chat channel.
- * 
- * 
- * 总结：由此可见，handler是给客户端用的，而这里的remote也就是rpc远程调用是给服务器用的，因为到时候分布式部署，
- * 服务器也需要随时查询各个应用服务器的信息
- *
- * @param {Object} opts parameters for request  
- * @param {String} name channel name            通道名字
- * @param {boolean} flag channel parameter      通道参数
- * @return {Array} users uids in channel        所有用户uid列表
- *
- */
-ChatRemote.prototype.get = function(rid, flag) {
+ChatRemote.prototype.get = function(rid, flag) { // 通过房间id得到房间内的所有人
 	var users = [];
 	var channel = this.channelService.getChannel(rid, flag);
 	if( !! channel) {
 		users = channel.getMembers();
 	}
-	for(var i = 0; i < users.length; i++) {
 
-		//用户名 + ‘*’ + rid，所以这里得到用户名
-		users[i] = users[i].split('*')[0];
+	for(var i = 0; i < users.length; i++) {
+		users[i] = users[i].split('*')[0]; // 用户名 + ‘*’ + rid，所以这里得到用户名
 	}
 	return users;
 };
 
-/**
- * 功能：把人从指定名字对应的channel中踢出去
- * Kick user out chat channel.
- *
- * @param {String} uid unique id for user    唯一用户id
- * @param {String} sid server id             唯一服务器id
- * @param {String} name channel name         通道名字
- *
- */
+// 从服务器上踢掉这个人
 ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 	var channel = this.channelService.getChannel(rid, false);
 	if( !! channel) {
@@ -97,12 +51,6 @@ ChatRemote.prototype.kick = function(uid, sid, rid, cb) {
 		route: 'onLeave',
 		user: username
 	};
-
-	console.info("-----广播用户被踢 ChatRemote.prototype.kick called, uid:" + uid 
-										   							      + " sid:"  + sid
-																	      + " rid:" + rid
-																	      + " route:" + 'onLeave'
-																	      + " username:" + username);									   
 
 	channel.pushMessage(param);
 	cb();
