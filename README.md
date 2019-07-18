@@ -7,8 +7,8 @@
 
 ## 2)运行
 *	node版本: v8.11.1
-* 安装cnpm
-   * npm install cnpm -g --registry=https://registry.npm.taobao.org
+*  安装依赖库: sudo sh 1-npm-install.sh
+*  全局安装: sudo npm install -g pomelo
 
 ## 3)效果图
-![](shotscreens/1.png)
+![](imgs/1.png)
