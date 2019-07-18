@@ -18,9 +18,9 @@ var Handler = function (app) {
 
 var handler = Handler.prototype;
 
-handler.queryEntry = function (msg, session, next) {          // 处理用户进来
+handler.queryEntry = function (msg, session, next) {  // 处理用户进来
 	var uid = msg.uid;
-	if (!uid) { 										      // 进来的人没传入uid，报500错
+	if (!uid) { // 进来的人没传入uid，报500错
 		next(null, {
 			code: 500
 		});
@@ -35,19 +35,17 @@ handler.queryEntry = function (msg, session, next) {          // 处理用户进
 		return;
 	}
 
-	// 远程调用time服务器查询当前时间 这个参数看着没用，其实在routeUtil中可以看出来是发给哪个Time服务器
 	var routeParam = {
-		crcUid: crc.crc32(uid)
+		crcUid: crc.crc32(uid) // 参考routeUtil，远程调用的第一个参数，用于路由计算
 	};
 
 	// 前端服务器gatehandler 调用后端服务器timeRemote来完成功能
 	this.app.rpc.time.timeRemote.getCurrentTime(routeParam, 'test arg1', 'test arg2', function (hour, min, sec) {
 		var availableConnector = dispatcher.dispatch(uid, connectors);  // 获得一个可用的connector服务器
 		next(null, {
-			code: 200,                            // 成功标志返回值
-			host: availableConnector.host,        // 主机
-			port: availableConnector.clientPort   // 端口号
+			code: 200, // 成功标志返回值
+			host: availableConnector.host,
+			port: availableConnector.clientPort   // 注意: 这里是前端服务器端口号
 		});
-
 	});
 };

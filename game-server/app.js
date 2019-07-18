@@ -24,8 +24,7 @@ app.configure('production|development', 'connector', function () {
 });
 
 app.configure('production|development', function () {
-    // 不设置路由将使用默认路由
-    app.route('chat', routeUtil.chat);
+    app.route('chat', routeUtil.chat); // 不设置路由将使用默认路由
     app.route('time', routeUtil.getCurrentTime);
 
     app.filter(pomelo.timeout());                            // 过滤器
@@ -51,7 +50,7 @@ app.configure('production|development', 'gate', function () {
     });
 });
 
-//helloworld组件每5s上报一次
+// helloworld组件每5s上报一次
 app.configure('production|development', 'master', function () {
     app.load(helloWorld, {interval: 5000});
 });
