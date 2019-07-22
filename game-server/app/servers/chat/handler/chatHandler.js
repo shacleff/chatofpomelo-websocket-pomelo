@@ -1,5 +1,3 @@
-var chatRemote = require('../remote/chatRemote');
-
 module.exports = function (app) {
     return new Handler(app);
 };

@@ -1,0 +1,11 @@
+1.玩家先连接网关
+
+2.网关作为前端负载均衡器, 根据路由，分配玩家一个connector地址，connector可以有多个
+
+3.玩家根据uid
+
+4.玩家通过rpc调用, 在entryHandler中调用其它服务器 chatRemote的add接口，以假如聊天室
+  uid= jn*1 serverId= connector-server-3 rid= 1
+
+5.handler.send = function (msg, session, next) {}
+  思考为何一定是msg session next这3个接口

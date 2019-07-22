@@ -1,3 +1,5 @@
+var log = require("./../../../../3rd/log");
+
 module.exports = function (app) {
     return new Handler(app);
 };
@@ -34,6 +36,10 @@ handler.enter = function (msg, session, next) {
 
     session.on('closed', onUserLeave.bind(null, self.app));
 
+    /**
+     *  uid= jn*1 serverId= connector-server-3 rid= 1
+     */
+    log.info("uid=", uid, "serverId=", self.app.get('serverId'), "rid=", rid);
     self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function (users) {
         next(null, {
             users: users  // 返回给客户端当前多少玩家
