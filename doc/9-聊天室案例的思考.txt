@@ -22,3 +22,6 @@
 
   chatHandler:
     里面的接口,让玩家调用,提供实际的聊天功能，发送消息、广播消息等;
+
+7)logger的使用
+var logger = require('pomelo-logger').getLogger('pomelo', __filename);
