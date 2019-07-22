@@ -1,0 +1,10 @@
+1)entryHandler.js中rpc调用
+
+self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function (users) {
+    next(null, {
+        users: users  // 返回给客户端当前多少玩家
+    });
+});
+
+第一个参数session是什么？
+

@@ -1,11 +1,24 @@
-1.玩家先连接网关
+1)玩家先连接网关
 
-2.网关作为前端负载均衡器, 根据路由，分配玩家一个connector地址，connector可以有多个
+2)网关作为前端负载均衡器, 根据路由，分配玩家一个connector地址，connector可以有多个
 
-3.玩家根据uid
+3)玩家根据uid
 
-4.玩家通过rpc调用, 在entryHandler中调用其它服务器 chatRemote的add接口，以假如聊天室
+4)玩家通过rpc调用, 在entryHandler中调用其它服务器 chatRemote的add接口，以假如聊天室
   uid= jn*1 serverId= connector-server-3 rid= 1
 
-5.handler.send = function (msg, session, next) {}
+5)handler.send = function (msg, session, next) {}
   思考为何一定是msg session next这3个接口
+
+6)gate 和 connector(多个) 是前端服务器, chat是后端服务器:
+  gate：
+    只做connector服务器负载均衡的作用;
+
+  connector:
+    在handler中，通过远程调用 chat服务器中remote接口,让玩家加入到channel中;
+
+  chatRemote：
+    负责玩家的加入，因为remote服务器是给handler调用的
+
+  chatHandler:
+    里面的接口,让玩家调用,提供实际的聊天功能，发送消息、广播消息等;
