@@ -1,6 +1,5 @@
-module.exports = function (app) {
-    return new ChatRemote(app);
-};
+var room = require("./../../../game/room.js");
+var room_mgr = require("./../../../game/room_mgr.js");
 
 var ChatRemote = function (app) {
     this.app = app;
@@ -11,35 +10,25 @@ var ChatRemote = function (app) {
  * 功能:玩家加入聊天服务器
  */
 ChatRemote.prototype.add = function (uid, sid, rid, flag, cb) {
-    // rid: 客户端房间号
-    var channel = this.channelService.getChannel(rid, flag);
-
-    /**
-     * uid由3部分组成
-     *   (1)名字
-     *   (2)* 因此可以用这个符号来分割名字和房间号
-     *   (3)rid
-     */
-    var username = uid.split('*')[0];
-
-    var param = {
-        route: 'onAdd', // 客户端使用的路由,可以收到信息
-        user: username
-    };
-
-    channel.pushMessage(param); // 广播通知其它玩家, 新进入玩家的信息
-
-    /**
-     * 最最核心的东西: channel中可以加入不同sid,也就是不同connector服务器上的人可以加入到同一个channel
-     */
-    if (!!channel) {
-        channel.add(uid, sid);
+    // 房间不存在,则添加房间
+    if(!room_mgr.is_exist_room_by_rid(rid)){
+        var channel = this.channelService.getChannel(rid, flag);
+        var r = new room(this.channelService, channel, rid);
+        room_mgr.add_room(rid, r);
     }
 
-    /**
-     * 最最核心的东西:
-     *   (1)cb可以用于远程调用时,返回给回调函数
-     */
+    var cur_room =  room_mgr.get_room_by_rid(rid);
+
+    // 在房间内广播消息
+    cur_room.broadcast_msg('onAdd', {
+        // route: ,
+        user: uid.split('*')[0]
+    });
+
+
+    // 先广播,在让自己加入
+    cur_room.add_player_by_uid_sid(uid, sid);
+
     cb(this.get(rid, flag));
 };
 
@@ -48,13 +37,12 @@ ChatRemote.prototype.add = function (uid, sid, rid, flag, cb) {
  */
 ChatRemote.prototype.get = function (rid, flag) { // 通过房间id得到房间内的所有人
     var users = [];
-    var channel = this.channelService.getChannel(rid, flag);
-    if (!!channel) {
-        users = channel.getMembers();
-    }
-
-    for (var i = 0; i < users.length; i++) {
-        users[i] = users[i].split('*')[0]; // 用户名 + ‘*’ + rid，所以这里得到用户名
+    var cur_room = room_mgr.get_room_by_rid(rid);
+    if(cur_room){
+        var player_list = cur_room.get_player_list();
+        player_list.forEach(function (val, i, arr) {
+            users.push(val.username);
+        });
     }
     return users;
 };
@@ -63,18 +51,19 @@ ChatRemote.prototype.get = function (rid, flag) { // 通过房间id得到房间�
  * 功能:从服务器上踢掉这个人
  */
 ChatRemote.prototype.kick = function (uid, sid, rid, cb) {
-    var channel = this.channelService.getChannel(rid, false);
-    if (!!channel) {
-        channel.leave(uid, sid);
+    var cur_room = room_mgr.get_room_by_rid(rid);
+    if(cur_room){
+        var player = cur_room.get_player_by_uid(uid);
+        cur_room.remove_player_by_uid_sid(uid, sid);
+        cur_room.broadcast_msg({
+            route: 'onLeave',
+            user: player.username
+        });
     }
 
-    var username = uid.split('*')[0];
-
-    var param = {
-        route: 'onLeave', // 客户端监听的路由
-        user: username
-    };
-
-    channel.pushMessage(param);
     cb();
+};
+
+module.exports = function (app) {
+    return new ChatRemote(app);
 };

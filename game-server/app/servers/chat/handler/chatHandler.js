@@ -1,6 +1,5 @@
-module.exports = function (app) {
-    return new Handler(app);
-};
+var room = require("./../../../game/room.js");
+var room_mgr = require("./../../../game/room_mgr.js");
 
 var Handler = function (app) {
     this.app = app;
@@ -9,31 +8,33 @@ var Handler = function (app) {
 var handler = Handler.prototype;
 
 handler.send = function (msg, session, next) {
-    var rid = session.get('rid'); // 房间rid
-    var username = session.uid.split('*')[0]; // 谁发送的消息
-    var channelService = this.app.get('channelService');
-
+    var cur_room = room_mgr.get_room_by_rid(session.get('rid'));
+    var player = cur_room.get_player_by_uid(session.uid);
     var param = {
-        from: username,     //谁发的
-        target: msg.target, //发给谁
-        msg: msg.content    //聊天消息内容
-    };
+        from: player.username,
+        target: msg.target,
+        msg: msg.content
+    }
 
-    channel = channelService.getChannel(rid, false);
+    if(msg.target == '*'){
+        cur_room.broadcast_msg('onChat', param);
+    }else{
+        var target_uid = msg.target + '*' + player.rid;
+        var target_player = cur_room.get_player_by_uid(target_uid);
 
-    if (msg.target == '*') {
-        channel.pushMessage('onChat', param);
-    } else {
-        var tuid = msg.target + '*' + rid;
-        var tsid = channel.getMember(tuid)['sid'];
+        var uids = [{
+            uid: target_uid,
+            sid: target_player.sid
+        }];
 
-        channelService.pushMessageByUids('onChat', param, [{
-            uid: tuid,
-            sid: tsid
-        }]);
+        cur_room.send_msg_to_player_list('onChat', param, uids)
     }
 
     next(null, {
         route: msg.route
     });
+};
+
+module.exports = function (app) {
+    return new Handler(app);
 };
