@@ -21,7 +21,6 @@ ChatRemote.prototype.add = function (uid, sid, rid, flag, cb) {
 
     // 在房间内广播消息
     cur_room.broadcast_msg('onAdd', {
-        // route: ,
         user: uid.split('*')[0]
     });
 
