@@ -25,7 +25,18 @@ handler.enter = function (msg, session, next) {
         return;
     }
 
+    /**
+     * 最核心的
+     *   (1)只有一次bind,表示唯一玩家
+     */
     session.bind(uid);
+
+    /**
+     * 最核心的:
+     *   (1)rid是set进来的, push后，后端服务器才可以set到;
+     *   (2)rid所在的房间，同一个房间的玩家，可以在不同connector服务器上;
+     *   (3)同一个rid的,则在同一个聊天服务器上;
+     */
     session.set('rid', rid);
     session.push('rid', function (err) {
         if (err) {
