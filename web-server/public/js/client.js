@@ -84,8 +84,12 @@ function tip(type, name) {
 };
 
 function initUserList(data) { // 初始化用户列表
-	// $("#usersList").clear(); //不行？
+	$("#usersList").empty(); //不行？
 	users = data.users;
+	if(users.indexOf('*') == -1){
+		users.unshift('*');
+	}
+
 	for(var i = 0; i < users.length; i++) {
 		var slElement = $(document.createElement("option"));
 		slElement.attr("value", users[i]);
