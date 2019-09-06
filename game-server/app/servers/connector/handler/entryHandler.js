@@ -10,15 +10,14 @@ var Handler = function (app) {
 
 var handler = Handler.prototype;
 
-/**
- * 注意connector是多个的，看看怎么区分
- */
 handler.enter = function (msg, session, next) {
     var self = this;
-    var rid = msg.rid; // 房间id
+    var rid = msg.rid; // 房间id,字符串
     var uid = msg.username + '*' + rid; // 用户名字 + '*' + rid 组成用户的唯一标示uid
     var sessionService = self.app.get('sessionService');
-    if (!!sessionService.getByUid(uid)) { // 这个next得作用必然是：将当前状态返回给客户端，告诉他出现了500错误
+
+    // 根据uid判断已经在房间
+    if (!!sessionService.getByUid(uid)) {
         next(null, {
             code: 500,
             error: true
@@ -26,8 +25,8 @@ handler.enter = function (msg, session, next) {
         return;
     }
 
-    session.bind(uid); //会话绑定uid作为唯一标示
-    session.set('rid', rid); //房间id
+    session.bind(uid);
+    session.set('rid', rid);
     session.push('rid', function (err) {
         if (err) {
             console.error('set rid for session service failed! error is : %j', err.stack);
@@ -36,13 +35,9 @@ handler.enter = function (msg, session, next) {
 
     session.on('closed', onUserLeave.bind(null, self.app));
 
-    /**
-     *  uid= jn*1 serverId= connector-server-3 rid= 1
-     */
-    log.info("uid=", uid, "serverId=", self.app.get('serverId'), "rid=", rid);
     self.app.rpc.chat.chatRemote.add(session, uid, self.app.get('serverId'), rid, true, function (users) {
         next(null, {
-            users: users  // 返回给客户端当前多少玩家
+            users: users
         });
     });
 };

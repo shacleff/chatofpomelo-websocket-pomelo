@@ -27,13 +27,13 @@ app.configure('production|development', function () {
     app.route('chat', routeUtil.chat); // 不设置路由将使用默认路由
     app.route('time', routeUtil.getCurrentTime);
 
-    app.filter(pomelo.timeout());                            // 过滤器
+    app.filter(pomelo.timeout());      // 过滤器
 });
 
-app.configure('production|development', 'chat', function () {
-    var abuseFilter = require('./app/servers/chat/filter/abuseFilter'); // 新增脏话过滤器
-    app.filter(abuseFilter());
-});
+// app.configure('production|development', 'chat', function () {
+//     var abuseFilter = require('./app/servers/chat/filter/abuseFilter'); // 新增脏话过滤器
+//     app.filter(abuseFilter());
+// });
 
 /**
  * 功能：route路由压缩
@@ -51,16 +51,16 @@ app.configure('production|development', 'gate', function () {
 });
 
 // helloworld组件每5s上报一次
-app.configure('production|development', 'master', function () {
-    app.load(helloWorld, {interval: 5000});
-});
+// app.configure('production|development', 'master', function () {
+//     app.load(helloWorld, {interval: 5000});
+// });
 
 // 上报
-app.registerAdmin(timeReport, {
-    app: app
-});
+// app.registerAdmin(timeReport, {
+//     app: app
+// });
 
-app.start(); // 启动子进程
+app.start();
 
 process.on('uncaughtException', function (err) {
     console.error('全局 Caught exception: ' + err.stack);
